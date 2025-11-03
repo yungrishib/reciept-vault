@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReceiptVault Pro - Smart Receipt Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUmVjZWlwdFZhdWx0IFBybyIsInNob3J0X25hbWUiOiJSZWNlaXB0VmF1bHQiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBGMTcyQSIsInRoZW1lX2NvbG9yIjoiIzYzNjZGMSJ9">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <h1 class="header-title">ReceiptVault Pro</h1>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Side Menu -->
+        <aside class="side-menu hidden" id="sideMenu">
+            <div class="menu-content">
+                <div class="menu-header">
+                    <h2>ReceiptVault Pro</h2>
+                    <button class="close-menu" id="closeMenu" aria-label="Close menu">&times;</button>
+                </div>
+                <nav class="menu-nav">
+                    <a href="#" class="menu-item" data-action="settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Settings
+                    </a>
+                    <a href="#" class="menu-item" data-action="export">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7,10 12,15 17,10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Export Data
+                    </a>
+                    <a href="#" class="menu-item" data-action="import">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17,8 12,3 7,8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Import Data
+                    </a>
+                    <a href="#" class="menu-item" data-action="backup">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="m22 21-3-3m0 0L17 20m2-2 3 1"></path>
+                        </svg>
+                        Backup & Sync
+                    </a>
+                    <a href="#" class="menu-item" data-action="help">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <point x="12" y="17" r=".01"></point>
+                        </svg>
+                        Help & Support
+                    </a>
+                    <a href="#" class="menu-item" data-action="about">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="8"></line>
+                        </svg>
+                        About
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <div class="container">
+                    <div class="welcome-section">
+                        <h2>Dashboard Overview</h2>
+                        <p class="text-secondary">Track your expenses and manage receipts efficiently</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon--primary">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10,9 9,9 8,9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalReceipts">0</div>
+                                <div class="stat-label">Total Receipts</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon--success">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalAmount">$0.00</div>
+                                <div class="stat-label">Total Amount</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon--warning">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="monthlyAmount">$0.00</div>
+                                <div class="stat-label">This Month</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon stat-icon--info">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12,6 12,12 16,14"></polyline>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="avgAmount">$0.00</div>
+                                <div class="stat-label">Average Receipt</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="btn btn--primary quick-action-btn" data-action="scan">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            Scan Receipt
+                        </button>
+                        <button class="btn btn--secondary quick-action-btn" data-action="add-manual">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Manually
+                        </button>
+                    </div>
+
+                    <div class="recent-section">
+                        <h3>Recent Receipts</h3>
+                        <div class="recent-list" id="recentList">
+                            <!-- Recent receipts will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Receipts Tab -->
+            <section id="receipts" class="tab-content">
+                <div class="container">
+                    <div class="receipts-header">
+                        <h2>All Receipts</h2>
+                        <div class="receipts-controls">
+                            <div class="search-box">
+                                <input type="text" id="searchInput" placeholder="Search receipts..." class="form-control">
+                                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </div>
+                            <button class="btn btn--outline filter-btn" id="filterBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"></polygon>
+                                </svg>
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filters-panel hidden" id="filtersPanel">
+                        <div class="filter-group">
+                            <label for="categoryFilter">Category:</label>
+                            <select id="categoryFilter" class="form-control">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateFromFilter">Date From:</label>
+                            <input type="date" id="dateFromFilter" class="form-control">
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateToFilter">Date To:</label>
+                            <input type="date" id="dateToFilter" class="form-control">
+                        </div>
+                        <div class="filter-group">
+                            <label for="amountMinFilter">Min Amount:</label>
+                            <input type="number" id="amountMinFilter" class="form-control" min="0" step="0.01">
+                        </div>
+                        <div class="filter-group">
+                            <label for="amountMaxFilter">Max Amount:</label>
+                            <input type="number" id="amountMaxFilter" class="form-control" min="0" step="0.01">
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn--secondary" id="clearFilters">Clear</button>
+                            <button class="btn btn--primary" id="applyFilters">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="receipts-list" id="receiptsList">
+                        <!-- Receipts will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Tab -->
+            <section id="analytics" class="tab-content">
+                <div class="container">
+                    <h2>Analytics & Insights</h2>
+                    
+                    <div class="chart-controls">
+                        <select id="chartPeriod" class="form-control">
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>Spending by Category</h3>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3>Monthly Trend</h3>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3>Top Merchants</h3>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="merchantChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3>Payment Methods</h3>
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="paymentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Receipt Tab -->
+            <section id="add" class="tab-content">
+                <div class="container">
+                    <h2>Add New Receipt</h2>
+                    
+                    <div class="ai-scan-section">
+                        <button class="btn btn--primary ai-scan-btn" id="aiScanBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            AI Scan Receipt
+                        </button>
+                        <p class="scan-description">Take a photo or upload an image to automatically extract receipt data</p>
+                        <input type="file" id="receiptImage" accept="image/*" capture="camera" class="hidden">
+                    </div>
+
+                    <form id="receiptForm" class="receipt-form">
+                        <div class="form-group">
+                            <label for="receiptTitle" class="form-label">Receipt Title</label>
+                            <input type="text" id="receiptTitle" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="receiptStore" class="form-label">Store/Merchant</label>
+                            <input type="text" id="receiptStore" class="form-control" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="receiptAmount" class="form-label">Amount</label>
+                                <input type="number" id="receiptAmount" class="form-control" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiptCurrency" class="form-label">Currency</label>
+                                <select id="receiptCurrency" class="form-control" required>
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="receiptDate" class="form-label">Date</label>
+                            <input type="date" id="receiptDate" class="form-control" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="receiptCategory" class="form-label">Category</label>
+                                <select id="receiptCategory" class="form-control" required>
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiptPayment" class="form-label">Payment Method</label>
+                                <select id="receiptPayment" class="form-control" required>
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="receiptWarranty" class="form-label">Warranty Period</label>
+                            <select id="receiptWarranty" class="form-control">
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="receiptTags" class="form-label">Tags</label>
+                            <input type="text" id="receiptTags" class="form-control" placeholder="Enter tags separated by commas">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="receiptNotes" class="form-label">Notes</label>
+                            <textarea id="receiptNotes" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn--secondary" id="saveDraftBtn">Save Draft</button>
+                            <button type="submit" class="btn btn--primary">Save Receipt</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Settings Modal -->
+            <div id="settingsModal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Settings</h2>
+                        <button class="modal-close" id="closeSettingsModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="settings-section">
+                            <h3>Appearance</h3>
+                            <div class="form-group">
+                                <label for="themeSelect" class="form-label">Theme</label>
+                                <select id="themeSelect" class="form-control">
+                                    <option value="auto">Auto (System)</option>
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Currency</h3>
+                            <div class="form-group">
+                                <label for="defaultCurrency" class="form-label">Default Currency</label>
+                                <select id="defaultCurrency" class="form-control">
+                                    <!-- Will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>AI Services</h3>
+                            <div class="ai-services" id="aiServicesConfig">
+                                <!-- AI services will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Notifications</h3>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="warrantyNotifications">
+                                    <span class="checkmark"></span>
+                                    Warranty expiration alerts
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="budgetNotifications">
+                                    <span class="checkmark"></span>
+                                    Budget limit notifications
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Data Management</h3>
+                            <div class="storage-info">
+                                <p>Storage Used: <span id="storageUsed">0</span> KB</p>
+                            </div>
+                            <button class="btn btn--outline" id="clearAllData">Clear All Data</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn--secondary" id="cancelSettings">Cancel</button>
+                        <button class="btn btn--primary" id="saveSettings">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-tab="dashboard">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                </svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" data-tab="receipts">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14,2 14,8 20,8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10,9 9,9 8,9"></polyline>
+                </svg>
+                <span>Receipts</span>
+            </button>
+            <button class="nav-item" data-tab="analytics">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                </svg>
+                <span>Analytics</span>
+            </button>
+            <button class="nav-item" data-tab="add">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <span>Add</span>
+            </button>
+        </nav>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Processing receipt...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
